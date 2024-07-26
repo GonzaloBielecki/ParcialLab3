@@ -1,32 +1,32 @@
 import { useState } from 'react'
-
-import './App.css'
 import { useEffect } from 'react'
+
 
 function App() {
   const [nombre,setNombre]=useState("")
   const [edad,setEdad]=useState(0)
-  const [listaPersona,setListaPersona]=useState([""])
+  const [listaPersona,setListaPersona]=useState([])
   const [promedio,setPromedio]=useState(0)
   const [mayor,setMayor]=useState(false)
 
-  const agregarPersona=()=>{
-    setListaPersona(
-      [...listaPersona,{"nombre":nombre,"edad":edad}]
-    )
-    setNombre("")
+  const agregarPersona = ()=>{
+    setListaPersona([...listaPersona,{"nombre":nombre, "edad":edad}])
     setEdad(0)
+    setNombre("")
   }
   useEffect(()=>{
     let suma=0
     listaPersona.forEach((persona)=>{
+      suma += persona.edad
       if (persona.edad >17){
         setMayor(true)
+        
       }
-      suma += persona.edad
+      
     })
     suma= suma/ listaPersona.length
     setPromedio(suma)
+    console.log(suma)
   },[listaPersona])
  
 
