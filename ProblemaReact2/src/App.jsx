@@ -1,28 +1,58 @@
 import { useState } from 'react'
 
 import './App.css'
+import { useEffect } from 'react'
 
 function App() {
-  const [persona,setPersona]=useState({
-    "nombre":"",
-    "edad":0
-  })
+  const [nombre,setNombre]=useState("")
+  const [edad,setEdad]=useState(0)
   const [listaPersona,setListaPersona]=useState([""])
+  const [promedio,setPromedio]=useState(0)
+  const [mayor,setMayor]=useState(false)
 
-  const agregar = (e)=>{
-    e.preventDefault()
-    setListaPersona([...listaPersona,persona])
+  const agregarPersona=()=>{
+    setListaPersona(
+      [...listaPersona,{"nombre":nombre,"edad":edad}]
+    )
+    setNombre("")
+    setEdad(0)
   }
-  console.log(listaPersona)
+  useEffect(()=>{
+    let suma=0
+    listaPersona.forEach((persona)=>{
+      if (persona.edad >17){
+        setMayor(true)
+      }
+      suma += persona.edad
+    })
+    suma= suma/ listaPersona.length
+    setPromedio(suma)
+  },[listaPersona])
+ 
 
   return (
     <>
-      <form onSubmit={agregar}>
-        <label htmlFor="nombre">Ingresar Nombre</label>
-        <input type="text" onChange={(e)=>setPersona({...pesona,"nombre":e.target.value})}/>
-        <label htmlFor="edad">ingresar Edad</label>
-        <input type="number" onChange={(e)=>setPersona({...persona,"edad":e.target.value})}/>
-        <button type='submit'>Agregar</button>
+      <form>
+        <div>
+          <label htmlFor="nombre">Ingresar Nombre</label>
+          <input type="text" onChange={(e)=>setNombre(e.target.value)}/>
+          
+        </div>
+        <div>
+          <label htmlFor="edad">ingresar Edad</label>
+          <input type="number" onChange={(e)=>setEdad(Number(e.target.value))}/>
+        </div>
+        <button type='button' onClick={agregarPersona}>Agregar</button>
+        <ul>
+            {listaPersona.map((persona,index)=>(
+              <li key={index}> {persona.nombre},{persona.edad} </li>
+            ))}
+        </ul>
+        {mayor ? <span>"Existe una persona mayor de edad"</span> : <span>"No existe persona mayor de edad"</span>}
+        <br />
+        <span>El promedio de edad es: {promedio}</span>
+       
+        
       </form>
       
       
